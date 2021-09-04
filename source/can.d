@@ -1,9 +1,25 @@
 module can;
 
 import rt.stdc;
+//import rt.refcount;
+//import rt.alloc;
 
 import Core.Inc.can;
 import Core.Inc.hal;
+
+struct CanMessage {
+    private char[8] buf;
+    public char[] data;
+    private int stdId;
+    public this(const(char)[] message, int id) {
+        assert(message.length <= 8, "Excessive message length");
+        buf[] = message[];
+        data = buf[0..message.length];
+        stdId = id;
+    }
+}
+
+void transmit(CanMessage m) { transmit(m.data, m.stdId); }
 
 void transmit(const(char)[] message, uint stdId)
 {
@@ -31,6 +47,15 @@ void transmit(const(char)[] message, uint stdId)
     printf("ESR: %08lx\n", hcan1.Instance.ESR);
     printf("TSR: %08lx\n", hcan1.Instance.TSR);
 }
+
+/*
+void transmitMessages(RefCountedArray!CanMessage messages)
+{
+    foreach(message; messages) {
+        transmit(message.data, message.stdId);
+    }
+}
+*/
 
 void test()
 {

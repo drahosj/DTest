@@ -1,6 +1,7 @@
 module main;
 
 import rt.stdc;
+//import rt.refcount;
 
 import Core.Inc.main;
 /* Hack needed because ST forgot to include this in the generated main.h */
@@ -30,12 +31,18 @@ extern (C) void main()
     }
     
     
-    char[8] messageBuf = "taco";
-    
     printf("Starting CAN\n");
     HAL_CAN_Start(&hcan1);
     
     printf("Transmitting CAN\n");
+    
+    /* Create a dynamic array because we can */
+    //RefCountedArray!(char[8]) canMessages;
+    
+    //auto m = can.CanMessage("message", 100);
+    
+    /* Let's send 12 first */
+    
     HAL_Delay(100);
     can.test();
     HAL_Delay(100);
