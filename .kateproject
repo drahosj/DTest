@@ -1,0 +1,13 @@
+{
+  "name": "DTest" , 
+  "files": [ 
+    { "directory": ".", "recursive":1, 
+      "filters":["*.d", "*.c", "*.h", "Makefile"] 
+  } ],
+  "build": {
+    "directory": "build" , 
+    "build": "make all" , 
+    "clean": "make clean" , 
+    "install": "make install"
+  }
+}

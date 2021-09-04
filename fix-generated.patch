@@ -1,0 +1,99 @@
+diff --git a/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h b/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h
+index b69fb46..e840d0c 100644
+--- a/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h
++++ b/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h
+@@ -1986,7 +1986,6 @@ typedef struct
+ #define CAN_IER_SLKIE_Pos      (17U)                                           
+ #define CAN_IER_SLKIE_Msk      (0x1UL << CAN_IER_SLKIE_Pos)                     /*!< 0x00020000 */
+ #define CAN_IER_SLKIE          CAN_IER_SLKIE_Msk                               /*!<Sleep Interrupt Enable */
+-#define CAN_IER_EWGIE_Pos      (8U)                                            
+ 
+ /********************  Bit definition for CAN_ESR register  *******************/
+ #define CAN_ESR_EWGF_Pos       (0U)                                            
+@@ -15485,7 +15484,9 @@ typedef struct
+                                        ((INSTANCE) == I2C3))
+ 
+ /******************************* SMBUS Instances ******************************/
++/*
+ #define IS_SMBUS_ALL_INSTANCE         IS_I2C_ALL_INSTANCE
++*/
+ 
+ /******************************** I2S Instances *******************************/
+ #define IS_I2S_APB1_INSTANCE(INSTANCE)  (((INSTANCE) == SPI2) || \
+@@ -15506,8 +15507,9 @@ typedef struct
+                                      ((PERIPH) == SAI2_Block_A)  || \
+                                      ((PERIPH) == SAI2_Block_B))
+ /* Legacy define */
+-
++/*
+ #define IS_SAI_BLOCK_PERIPH IS_SAI_ALL_INSTANCE
++*/
+ 
+ /******************************** SPI Instances *******************************/
+ #define IS_SPI_ALL_INSTANCE(INSTANCE) (((INSTANCE) == SPI1) || \
+@@ -15836,7 +15838,9 @@ typedef struct
+                                                ((INSTANCE) == USART6))
+ 
+ /* Legacy defines */
++/*
+ #define IS_UART_INSTANCE          IS_UART_HALFDUPLEX_INSTANCE
++*/
+ 
+ /****************** UART Instances : Hardware Flow control ********************/
+ #define IS_UART_HWFLOW_INSTANCE(INSTANCE) (((INSTANCE) == USART1) || \
+@@ -15846,7 +15850,9 @@ typedef struct
+                                            ((INSTANCE) == UART5)  || \
+                                            ((INSTANCE) == USART6))
+ /******************** UART Instances : LIN mode **********************/
++/*
+ #define IS_UART_LIN_INSTANCE          IS_UART_HALFDUPLEX_INSTANCE
++*/
+ 
+ /********************* UART Instances : Smart card mode ***********************/
+ #define IS_SMARTCARD_INSTANCE(INSTANCE) (((INSTANCE) == USART1) || \
+@@ -15889,7 +15895,9 @@ typedef struct
+ 
+ /***************************** FMPI2C Instances *******************************/
+ #define IS_FMPI2C_ALL_INSTANCE(__INSTANCE__) ((__INSTANCE__) == FMPI2C1)
++/*
+ #define IS_FMPSMBUS_ALL_INSTANCE         IS_FMPI2C_ALL_INSTANCE
++*/
+ 
+ /******************************* SPDIFRX Instances ********************************/
+ #define IS_SPDIFRX_ALL_INSTANCE(INSTANCE) ((INSTANCE) == SPDIFRX)
+@@ -15949,8 +15957,10 @@ typedef struct
+ #define FSMC_IRQn              FMC_IRQn
+ 
+ /* Aliases for __IRQHandler */
++/*
+ #define FSMC_IRQHandler        FMC_IRQHandler
+ #define QuadSPI_IRQHandler     QUADSPI_IRQHandler
++*/
+ 
+ /**
+   * @}
+diff --git a/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h b/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
+index 7d9a165..85d96fc 100644
+--- a/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
++++ b/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
+@@ -8,8 +8,8 @@
+   *          is using in the C source code, usually in main.c. This file contains:
+   *           - Configuration section that allows to select:
+   *              - The STM32F4xx device used in the target application
+-  *              - To use or not the peripheral’s drivers in application code(i.e. 
+-  *                code will be based on direct access to peripheral’s registers 
++  *              - To use or not the peripherals drivers in application code(i.e.
++  *                code will be based on direct access to peripherals registers
+   *                rather than drivers API), this option is controlled by 
+   *                "#define USE_HAL_DRIVER"
+   *  
+@@ -114,8 +114,7 @@
+ #define __STM32F4xx_CMSIS_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
+ #define __STM32F4xx_CMSIS_VERSION        ((__STM32F4xx_CMSIS_VERSION_MAIN << 24)\
+                                          |(__STM32F4xx_CMSIS_VERSION_SUB1 << 16)\
+-                                         |(__STM32F4xx_CMSIS_VERSION_SUB2 << 8 )\
+-                                         |(__STM32F4xx_CMSIS_VERSION))
++                                         |(__STM32F4xx_CMSIS_VERSION_SUB2 << 8 )
+ 
+ /**
+   * @}
