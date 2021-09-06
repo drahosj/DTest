@@ -5,9 +5,11 @@ import rt.alloc;
 struct RefCountedArray(T) {
     int * refcount;
     T[] array;
+    T * origin;
 
     this(Args...)(size_t count, Args args) {
         array = allocArray!T(count, args);
+        origin = array.ptr;
         refcount = allocate!int();
 
         *refcount = 1;
@@ -27,6 +29,7 @@ struct RefCountedArray(T) {
         decRef();
         refcount = src.refcount;
         array = src.array;
+        origin = src.origin;
 
     }
 
@@ -34,7 +37,7 @@ struct RefCountedArray(T) {
         if (refcount !is null) {
             if ((*refcount -= 1) == 0) {
                 deallocate(refcount);
-                deallocate(array.ptr);
+                deallocate(origin);
             }
         }
     }
@@ -44,7 +47,13 @@ struct RefCountedArray(T) {
     @property size_t opDollar() { return array.length; }
 
     ref T opIndex(size_t i) { return array[i]; }
-
-    T[] opIndex() { return array[]; };
-
-};
+    
+    RefCountedArray!T opIndex(size_t[2] bounds) {
+        RefCountedArray!T copy = this;
+        copy.array = array[bounds[0]..bounds[1]];
+        
+        return copy;
+    }
+    
+    auto opIndex() { return array; }
+}
