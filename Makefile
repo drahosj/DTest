@@ -72,14 +72,14 @@ ASM_SOURCES =  \
 startup_stm32f446xx.s
 
 # D sources
-D_SOURCES = 		\
+D_SOURCES = 			\
 source/rt/syscalls.d 	\
-source/rt/stdc.d 	\
-source/rt/alloc.d 	\
+source/rt/stdc.d 		\
+source/rt/alloc.d 		\
 source/rt/refcount.d 	\
-source/add.d 		\
-source/main.d 		\
-source/can.d 		\
+source/add.d 			\
+source/dmain.d			\
+source/dcan.d			\
 
 #source/rt/sysmem.d 	\
 
@@ -159,7 +159,7 @@ MKDIR=mkdir
 PATCH=patch
 ECHO=echo
 
-DSTEP_DIR=dstep
+DSTEP_DIR=source
 GLOBAL_MODULE=Core.Inc.hal
 
 GLOBAL_MODULE_FILE=$(DSTEP_DIR)/$(subst .,/,$(GLOBAL_MODULE)).d
@@ -183,7 +183,7 @@ DSTEP_MODULES= \
 
 DSTEP_FILES=$(addsuffix .d,$(subst .,/,$(DSTEP_MODULES)))
 
-DSTEP_OUTPUTS=$(addprefix dstep/, $(DSTEP_FILES))
+DSTEP_OUTPUTS=$(addprefix $(DSTEP_DIR)/, $(DSTEP_FILES))
 
 D_SOURCES+=$(DSTEP_OUTPUTS)
 
@@ -249,15 +249,15 @@ OBJECTS += $(addprefix $(BUILD_DIR)/, $(D_SOURCES:.d=_d.o))
 vpath %.d $(sort $(dir $(D_SOURCES)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
-	mkdir -p $(@D)
+	$(MKDIR) -p $(@D)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
-	mkdir -p $(@D)
+	$(MKDIR) -p $(@D)
 	$(AS) -c $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/%_d.o: %.d Makefile $(GLOBAL_MODULE_FILE)| $(BUILD_DIR)
-	mkdir -p $(@D)
+	$(MKDIR) -p $(@D)
 	$(LDC) -c $(LDCFLAGS) -of $@ $<
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
@@ -271,10 +271,10 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@	
 	
 $(BUILD_DIR):
-	mkdir -p $@		
+	$(MKDIR) -p $@		
 
 $(GLOBAL_MODULE_FILE): Makefile $(DSTEP_OUTPUTS)
-	echo $(DSTEP_MODULES) | $(SED) 's/\s/\n/g' | $(AWK) '{print "public import "$$0";"}' > $@
+	$(ECHO) $(DSTEP_MODULES) | $(SED) 's/\s/\n/g' | $(AWK) '{print "public import "$$0";"}' > $@
 
 $(DSTEP_DIR)/%.d: %.h Makefile $(PATCHSTAMP) | $(DSTEP_DIR)
 	$(DSTEP) $(C_INCLUDES) -DSTM32F446xx $< -o $@

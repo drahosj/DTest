@@ -1,4 +1,4 @@
-module main;
+module dmain;
 
 import rt.stdc;
 import rt.refcount;
@@ -13,7 +13,7 @@ import Core.Inc.can;
 
 import Core.Inc.hal;
 
-static import can;
+static import can = dcan;
 
 extern (C) void main()
 {

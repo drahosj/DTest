@@ -1,4 +1,4 @@
-module can;
+module dcan;
 
 import rt.stdc;
 import rt.refcount;
