@@ -158,6 +158,7 @@ AWK=awk
 MKDIR=mkdir
 PATCH=patch
 ECHO=echo
+FIND=find
 
 DSTEP_DIR=dstep
 GLOBAL_MODULE=Core.Inc.hal
@@ -180,6 +181,9 @@ DSTEP_MODULES= \
     Core.Inc.gpio                	\
     Core.Inc.usart               	\
     Core.Inc.can                 	\
+
+#	$(subst /,.,$(basename $(shell $(FIND) Drivers -name '*.h')))	\
+#	$(subst /,.,$(basename $(shell $(FIND) Core/Inc -name '*.h')))	\
 
 DSTEP_FILES=$(addsuffix .d,$(subst .,/,$(DSTEP_MODULES)))
 
