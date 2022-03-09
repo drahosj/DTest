@@ -78,8 +78,8 @@ source/rt/stdc.d 		\
 source/rt/alloc.d 		\
 source/rt/refcount.d 	\
 source/add.d 			\
-source/dmain.d			\
-source/dcan.d			\
+source/main.d			\
+source/can.d			\
 
 #source/rt/sysmem.d 	\
 
@@ -159,7 +159,7 @@ MKDIR=mkdir
 PATCH=patch
 ECHO=echo
 
-DSTEP_DIR=source
+DSTEP_DIR=dstep
 GLOBAL_MODULE=Core.Inc.hal
 
 GLOBAL_MODULE_FILE=$(DSTEP_DIR)/$(subst .,/,$(GLOBAL_MODULE)).d
