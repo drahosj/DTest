@@ -153,6 +153,12 @@ CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -fdata-sections -ffunction-sectio
 
 # Dstep stuff
 DSTEP=dstep
+SED=sed
+AWK=awk
+MKDIR=mkdir
+PATCH=patch
+ECHO=echo
+
 DSTEP_DIR=dstep
 GLOBAL_MODULE=Core.Inc.hal
 
@@ -191,7 +197,7 @@ INLINE_IMPL_DIR=$(DSTEP_DIR)/_inline_impl
 C_SOURCES+=$(addprefix $(INLINE_IMPL_DIR)/, $(INLINE_IMPL_HEADERS:.h=.c))
 
 PATCHSTAMP=Drivers/_patched
-PATCH=fix-generated.patch
+PATCHFILE=fix-generated.patch
 PATCHED_FILES=Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h 	\
 			  Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h 	\
 
@@ -203,7 +209,7 @@ LDC_MCU=-mcpu=cortex-m4 -float-abi=hard
 LDCFLAGS=-mtriple=$(PREFIX:-=) -gcc=$(CC) $(LDC_MCU) $(MODFLAGS) -betterC -g
 
 # D Runtime
-DRUNTIME_LIBDIR=-L$(HOME)/druntime/generated/
+#DRUNTIME_LIBDIR=-L$(HOME)/druntime/generated/
 #DRUNTIME_LIB=-ldruntime
 
 ifeq ($(DEBUG), 1)
@@ -268,31 +274,31 @@ $(BUILD_DIR):
 	mkdir -p $@		
 
 $(GLOBAL_MODULE_FILE): Makefile $(DSTEP_OUTPUTS)
-	echo $(DSTEP_MODULES) | sed 's/\s/\n/g' | awk '{print "public import "$$0";"}' > $@
+	echo $(DSTEP_MODULES) | $(SED) 's/\s/\n/g' | $(AWK) '{print "public import "$$0";"}' > $@
 
 $(DSTEP_DIR)/%.d: %.h Makefile $(PATCHSTAMP) | $(DSTEP_DIR)
 	$(DSTEP) $(C_INCLUDES) -DSTM32F446xx $< -o $@
-	sed -i '1s/^/import $(GLOBAL_MODULE);/' $@
-	sed -i '1s/^/module $(subst /,.,$(subst .d,,$@));\n/' $@
-	sed -i '1s/ [^.]*./ /' $@
+	$(SED) -i '1s/^/import $(GLOBAL_MODULE);/' $@
+	$(SED) -i '1s/^/module $(subst /,.,$(subst .d,,$@));\n/' $@
+	$(SED) -i '1s/ [^.]*./ /' $@
 
 $(PATCHSTAMP): $(PATCHED_FILES)
-	patch -p1 < $(PATCH)
-	echo $(PATCH) > $(PATCHSTAMP)
+	$(PATCH) -p1 < $(PATCHFILE)
+	$(ECHO) $(PATCHFILE) > $(PATCHSTAMP)
 
 .PRECIOUS: $(INLINE_IMPL_DIR)/%.c
 $(INLINE_IMPL_DIR)/%.c: %.h Makefile | $(INLINE_IMPL_DIR)
-	mkdir -p $(@D)
-	sed 's/^__STATIC_INLINE//' < $< >> $@
-	sed -i '1s/^/$(addsuffix __END_INLINE_IMPL_INCLUDE__,$(addprefix __BEGIN_INLINE_IMPL_INCLUDE__,$(INLINE_IMPL_INCLUDES)))/' $@
-	sed -i '1s/__BEGIN_INLINE_IMPL_INCLUDE__/#include "/g' $@
-	sed -i '1s/__END_INLINE_IMPL_INCLUDE__/"\n/g' $@
+	$(MKDIR) -p $(@D)
+	$(SED) 's/^__STATIC_INLINE//' < $< >> $@
+	$(SED) -i '1s/^/$(addsuffix __END_INLINE_IMPL_INCLUDE__,$(addprefix __BEGIN_INLINE_IMPL_INCLUDE__,$(INLINE_IMPL_INCLUDES)))/' $@
+	$(SED) -i '1s/__BEGIN_INLINE_IMPL_INCLUDE__/#include "/g' $@
+	$(SED) -i '1s/__END_INLINE_IMPL_INCLUDE__/"\n/g' $@
 	
 $(INLINE_IMPL_DIR): | $(DSTEP_DIR)
-	mkdir $@
+	$(MKDIR) $@
 	
 $(DSTEP_DIR):
-	mkdir $@
+	$(MKDIR) $@
 	
 
 
@@ -300,7 +306,7 @@ $(DSTEP_DIR):
 # clean up
 #######################################
 clean:
-	-rm -fR $(BUILD_DIR) $(DSTEP_DIR)
+	-rm -fR $(BUILD_DIR) $(DSTEP_FILES)
   
 #######################################
 # dependencies

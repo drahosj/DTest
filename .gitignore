@@ -3,6 +3,7 @@ docs.json
 __dummy.html
 docs/
 /dtest
+source/_inline_impl
 dtest.so
 dtest.dylib
 dtest.dll
@@ -15,7 +16,7 @@ dtest-test-*
 *.lst
 build
 dstep
-Drivers
-Core
 .mxproject
 .kdev4
+Core
+Drivers
