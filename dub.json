@@ -1,0 +1,17 @@
+{
+	"authors": [
+		"Jake Drahos"
+	],
+	"copyright": "Copyright © 2021, Jake Drahos",
+	"description": "A minimal D application.",
+	"license": "BSD",
+	"name": "DTest",
+    "importPaths" : [
+        "dstep",
+        "source"
+    ],
+    "sourcePaths" : [
+        "dstep",
+        "source"
+    ]
+}
