@@ -20,3 +20,13 @@ extern (C) int _write(int file, char *ptr, int len)
 	}
 	return len;
 }
+
+extern (C) void _read() { for(;;){} }
+
+extern (C) void _exit() { for(;;){} }
+extern (C) void _kill() { for(;;){} }
+extern (C) void _getpid() { for(;;){} }
+extern (C) void _close() { for(;;){} }
+extern (C) void _fstat() { for(;;){} }
+extern (C) void _isatty() { for(;;){} }
+extern (C) void _lseek() { for(;;){} }

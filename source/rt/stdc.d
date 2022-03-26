@@ -5,6 +5,9 @@ extern (C) int puts(char * str);
 
 extern (C) void * malloc(int);
 extern (C) void free(void *);
+extern (C) void * memcpy(void *, const(void) *, size_t);
 
 extern (C) char toupper(char c);
 extern (C) char tolower(char c);
+
+extern (C) void * memset(void *, int, size_t);

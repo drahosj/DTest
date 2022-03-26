@@ -210,7 +210,7 @@ PATCHED_FILES=Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f446xx.h 	\
 MODFLAGS=-I$(DSTEP_DIR) -I$(PACKAGE_ROOT)
 LDC= ldc2
 LDC_MCU=-mcpu=cortex-m4 -float-abi=hard
-LDCFLAGS=-mtriple=$(PREFIX:-=) -gcc=$(CC) $(LDC_MCU) $(MODFLAGS) -betterC -g
+LDCFLAGS=-mtriple=$(PREFIX:-=) -gcc=$(CC) $(LDC_MCU) $(MODFLAGS) -betterC -g -w
 
 # D Runtime
 #DRUNTIME_LIBDIR=-L$(HOME)/druntime/generated/
@@ -232,7 +232,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.dep)"
 LDSCRIPT = STM32F446RETx_FLASH.ld
 
 # libraries
-LIBS = -lc -lm -lnosys $(DRUNTIME_LIB)
+LIBS = -lc -lm $(DRUNTIME_LIB) #-lnosys
 LIBDIR+= $(DRUNTIME_LIBDIR)
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
