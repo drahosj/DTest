@@ -4,7 +4,7 @@ import rt.stdc;
 
 enum isAllocable(T) = 
     is(T == struct) ||
-    is(__traits(isScalar, T));
+    __traits(isScalar, T);
 
 T * allocate(T, A...)(A a) if (isAllocable!T) 
 {
@@ -26,7 +26,7 @@ void initialize(T, A...)(T * t, A args)  if (isAllocable!T)
             memcpy(t, initializer.ptr, initializer.length);
         }
         static if (args.length > 0) {
-            ptr.__ctor(args);
+            t.__ctor(args);
         }
     } else static if (__traits(isScalar, T)) {
         T tmp;
@@ -54,6 +54,7 @@ T[] allocArray(T, A...)(size_t count, A args) if (isAllocable!T)
 
 void deallocate(T)(T[] ary) 
 {
+    printf("deallocating array\n");
     foreach(t; ary) {
         static if (__traits(compiles, ptr.__dtor())) {
             t.__dtor();
